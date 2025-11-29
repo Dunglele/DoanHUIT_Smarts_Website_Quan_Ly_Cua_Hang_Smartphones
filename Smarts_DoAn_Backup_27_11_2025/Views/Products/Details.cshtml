@@ -1,0 +1,64 @@
+﻿@model Smarts_DoAn_Backup_27_11_2025.Models.ProductDetailsMD
+@{
+    ViewBag.Title = "Details";
+}
+
+<main class="container my-5">
+    @if (Model != null)
+    {
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="@Model.Product.ANHSP" class="img-fluid rounded shadow-sm detail-image" alt="@Model.Product.TENSP">
+            </div>
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold">@Model.Product.TENSP</h1>
+                <p class="fs-4 fw-bold text-danger my-3">@string.Format("{0:N0}", Model.Product.GIA) VNĐ</p>
+                <b>Thương hiệu: </b><span class="badge bg-primary mb-3">@Model.Product.THUONGHIEU</span>
+                <br />
+                <p class="lead"><b>Mô tả: </b>@Model.Product.MOTA</p>
+
+                <hr>
+
+                <div class="d-flex align-items-center mb-4">
+                    <input type="number" id="product-quantity" class="form-control me-3" value="1" min="1" style="width: 100px;">
+                    <button class="btn btn-dark btn-lg flex-grow-1"
+                            onclick="addToCart('@Model.Product.MASP.Trim()', '@Model.Product.TENSP.Trim()', @Model.Product.GIA, '@Model.Product.ANHSP.Trim()')">
+                        <i class="bi bi-cart-plus me-2"></i>Thêm vào giỏ hàng
+                    </button>
+                </div>
+
+                <hr>
+
+                <h4 class="fw-bold">Thông số kỹ thuật chính</h4>
+                <ul class="list-unstyled product-specs">
+                    @Model.Product.THONGSO
+                </ul>
+            </div>
+        </div>
+
+    }
+    <hr class="my-5">
+
+    <section class="mb-5">
+        <h3 class="fw-bold mb-4">Sản phẩm liên quan</h3>
+        <div class="row">
+            @foreach (var item in Model.Products)
+            {
+                if (item.MADM == Model.Product.MADM && item.MASP != Model.Product.MASP)
+                {
+                    <div class="col-md-4">
+                        <div class="card product-card">
+                            <img src="@item.ANHSP" class="card-img-top" alt="@item.TENSP" style=" width: 100%; height: auto; border-radius: 30px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.TENSP</h5>
+                                <p class="card-text fw-bold">@string.Format("{0:N0}", item.GIA) VNĐ</p>
+                                <a href="@item.MASP" class="btn btn-outline-dark">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </section>
+
+</main>

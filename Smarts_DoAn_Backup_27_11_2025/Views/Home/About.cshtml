@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "About";
+}
+
+<main class="container my-5">
+
+    <div class="text-center my-5">
+        <h1 class="display-4 fw-bold">Giới Thiệu SmartS</h1>
+        <p class="fs-5 text-muted">Đồ án báo cáo học phần Công Nghệ Phần Mềm</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10 text-center">
+
+            <h2 class="fw-bold mb-3">SmartS - Website Quản Lý Cửa Hàng Bán Điện Thoại Di Động</h2>
+            <p class="lead text-muted px-lg-5">
+                Website Quản lý cửa hàng bán Smartphone được xây dựng với mục tiêu mang đến một giải pháp hiện đại, tiện lợi và hiệu quả cho việc kinh doanh điện thoại di động. Hệ thống giúp tự động hóa quy trình quản lý sản phẩm, khách hàng, đơn hàng và nhân viên, đồng thời hỗ trợ người dùng dễ dàng tra cứu, so sánh và mua sắm smartphone một cách nhanh chóng.
+            </p>
+
+            <img src="@Url.Content("~/img_product/thumb/huit_thumb_1.jpg")" class="img-fluid rounded shadow-sm my-5" alt="Smartphone Beta" style=" width: 100%; height: auto; border-radius: 30px; object-fit: cover;">
+
+            <p class="text-muted px-lg-5">
+                Về phía khách hàng, website cung cấp giao diện thân thiện, hiển thị rõ ràng các sản phẩm theo thương hiệu, danh mục và mức giá, giúp người mua dễ dàng tìm được chiếc điện thoại phù hợp với nhu cầu.
+            </p>
+            <p class="text-muted px-lg-5">
+                Về phía quản trị, hệ thống cho phép thêm, sửa, xóa sản phẩm, theo dõi tồn kho, doanh thu và đơn hàng, đảm bảo việc vận hành cửa hàng trở nên chuyên nghiệp và hiệu quả hơn.
+            </p>
+
+            <img src="@Url.Content("~/img_product/thumb/s_t_thumb.jpg")" class="img-fluid rounded shadow-sm my-5" alt="SmartShow Beta" style=" width: 100%; height: auto; border-radius: 30px; object-fit: cover;">
+
+            <p class="text-muted px-lg-5">
+                Đồ án được phát triển với tinh thần học hỏi, sáng tạo và ứng dụng công nghệ web vào thực tế, nhằm minh họa cách thức một hệ thống quản lý bán hàng có thể hỗ trợ doanh nghiệp nâng cao hiệu suất và trải nghiệm người dùng.
+            </p>
+
+            <a href="@Url.Action("Index", "Home")" class="btn btn-dark btn-lg mt-4">Khám phá cửa hàng</a>
+
+        </div>
+    </div>
+
+    <section class="newsletter-box mt-5">
+        <p>Đăng ký ngay để nhận tin tức mới từ cửa hàng !!!</p>
+    </section>
+</main>

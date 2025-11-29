@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Smarts_DoAn_Backup_27_11_2025.Models.NGUOIDUNG>
+@{
+    ViewBag.Title = "Accounts";
+    Layout = "~/Views/Shared/_AdminPanel.cshtml";
+}
+
+<div class="main-content">
+    <header class="admin-header">
+        <h4 class="mb-0 fw-bold text-dark">Tài khoản</h4>
+        <button class="btn btn-primary" onclick="openModal('add')">
+            <i class="bi bi-plus-lg me-1"></i> Thêm tài khoản mới
+        </button>
+    </header>
+
+    <div class="card">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light"><tr><th class="ps-3">Email</th><th>Mã Người Dùng</th><th>Vai trò</th><th class="text-end pe-3">Thao tác</th></tr></thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td class="ps-3">@user.EMAIL</td>
+                            <td>@user.MAND</td>
+                            <td><span class="badge badge-admin">@user.VAITRO</span></td>
+                            <td class="text-end pe-3">
+                                <button class="btn btn-sm btn-light text-primary me-2"
+                                        onclick="openModal('edit','@user.MAND', '@user.EMAIL', '@user.MATKHAU', '@user.VAITRO')">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                @if (user.VAITRO.Trim() != "Admin")
+                                {
+                                   <a href="@Url.Action("DeleteAccount", new { id = user.MAND })"
+                                      class="btn btn-sm btn-light text-danger"
+                                      onclick="return confirm('Bạn có chắc muốn xóa user này?');">
+                                       <i class="bi bi-trash"></i>
+                                   </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="catModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="modalTitle">Thông tin người dùng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            @using (Html.BeginForm("SaveAccount", "Admin", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <input type="hidden" name="Mode" id="formMode" value="add" />
+
+                    <div class="mb-3">
+                        <label class="form-label">Mã người dùng</label>
+                        <input type="text" class="form-control" name="MAND" id="txtMAND" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Tài khoản</label>
+                        <input type="text" class="form-control" name="EMAIL" id="txtEMAIL" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu</label>
+                        <input type="text" class="form-control" name="MATKHAU" id="txtMATKHAU" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Vai trò</label>
+                        <input type="text" class="form-control" name="VAITRO" id="txtVAITRO">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu dữ liệu</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hàm mở Modal và điền dữ liệu
+    function openModal(action, id, name, password, role) {
+        // Lấy element modal
+        var modalEle = document.getElementById('catModal');
+        var myModal = new bootstrap.Modal(modalEle);
+
+        if (action === 'edit') {
+            // --- CHẾ ĐỘ SỬA ---
+            document.getElementById('modalTitle').innerText = 'Cập nhật người dùng';
+            document.getElementById('formMode').value = 'edit';
+
+            // Điền dữ liệu vào ô input
+            document.getElementById('txtMAND').value = id;
+            document.getElementById('txtMAND').readOnly = true; // Khóa không cho sửa ID
+
+            document.getElementById('txtEMAIL').value = name;
+            document.getElementById('txtMATKHAU').value = password;
+            document.getElementById('txtVAITRO').value = role;
+        } else {
+            // --- CHẾ ĐỘ THÊM MỚI ---
+            document.getElementById('modalTitle').innerText = 'Thêm danh mục mới';
+            document.getElementById('formMode').value = 'add';
+
+            // Xóa trắng ô input
+            document.getElementById('txtMAND').value = '';
+            document.getElementById('txtMAND').readOnly = false; // Cho phép nhập ID
+
+            document.getElementById('txtEMAIL').value = '';
+            document.getElementById('txtMATKHAU').value = '';
+            document.getElementById('txtVAITRO').value = '';
+        }
+
+        // Hiển thị modal
+        myModal.show();
+    }
+</script>

@@ -1,0 +1,82 @@
+﻿@model Smarts_DoAn_Backup_27_11_2025.Models.CheckoutList
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<main class="container my-5">
+    @using (Html.BeginForm("Checkout", "Payment", FormMethod.Post))
+    {
+        <div class="row g-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <div id="checkout-total-summary">
+                </div>
+            </div>
+
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3 fw-bold">Thông Tin Giao Hàng</h4>
+                <form class="needs-validation" id="checkoutForm" data-redirect-url="@Url.Action("Index", "Home")" onsubmit="processCheckout(event)" novalidate>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <label for="firstName" class="form-label">Họ</label>
+                            <input type="text" name="HO" class="form-control" id="firstName" required>
+                            <div class="invalid-feedback">Vui lòng nhập họ.</div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Tên</label>
+                            <input type="text" name="TEN" class="form-control" id="lastName" required>
+                            <div class="invalid-feedback">Vui lòng nhập tên.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="email" class="form-label">Email <span class="text-muted">(Không bắt buộc)</span></label>
+                            <input type="email" name="EMAIL" class="form-control" id="email" placeholder="you@example.com">
+                            <div class="invalid-feedback">Vui lòng nhập một địa chỉ email hợp lệ.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input type="tel" name="SODIENTHOAI" class="form-control" id="phone" placeholder="0901234567" required>
+                            <div class="invalid-feedback">Vui lòng nhập số điện thoại.</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            <input type="text" name="DIACHI" class="form-control" id="address" placeholder="123 Đường ABC" required>
+                            <div class="invalid-feedback">Vui lòng nhập địa chỉ giao hàng.</div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h4 class="mb-3 fw-bold">Phương thức thanh toán</h4>
+
+                    <div class="my-3">
+                        <div class="form-check">
+                            <input id="cod" name="PHUONGTHUCTHANHTOAN" type="radio" class="form-check-input" checked required>
+                            <label class="form-check-label" for="cod">Thanh toán khi nhận hàng (COD)</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="bank" name="PHUONGTHUCTHANHTOAN" type="radio" class="form-check-input" required disabled>
+                            <label class="form-check-label" for="bank">Chuyển khoản Ngân hàng (Chưa hỗ trợ)</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="momo" name="PHUONGTHUCTHANHTOAN" type="radio" class="form-check-input" required disabled>
+                            <label class="form-check-label" for="momo">Ví điện tử (Momo, ZaloPay...)</label>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <button class="w-100 btn btn-dark btn-lg" type="submit">Đặt Hàng và Thanh Toán</button>
+                </form>
+            </div>
+        </div>
+
+    }
+
+</main>
+
+<script>
+    const goBackHome = "/Home/Index"
+</script>

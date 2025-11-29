@@ -1,0 +1,156 @@
+﻿@model IEnumerable<Smarts_DoAn_Backup_27_11_2025.Models.SANPHAM>
+@{
+    ViewBag.Title = "Index";
+    int n = 0;
+}
+
+<main>
+
+    <section class="container my-5 py-5">
+        <div style="display: flex; margin-top: -50px;;" class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold">Khám Phá Chiếc Smartphones Tiếp Theo Của Bạn</h1>
+                <p class="fs-5 text-muted">Phát hành bản mới nhất, vừa ra mắt thoải mái nhất</p>
+                <a href="@Url.Action("Contact", "Home")" class="btn btn-outline-dark btn-lg me-2">Đặt hàng ngay!</a>
+                <a href="@Url.Action("ProductList", "Products")" class="btn btn-dark btn-lg">Mua ngay</a>
+            </div>
+
+            @*Đây là nơi đặt thumb động*@
+
+            <div style="padding-top: 30px;" class="col-md-6">
+                <img src="@Url.Content("~/img_product/gif/gif_test.gif")" class="img-fluid rounded shadow-sm" alt="Hero Image">
+            </div>
+        </div>
+    </section>
+
+    <section class="container my-5">
+        <div class="text-center mb-4" style="margin-top: -40px;">
+            <h2 class="fw-bold">Smartphones nổi bật 2025 !!!</h2>
+            <p class="text-muted">Cùng kiểm tra sản phẩm "hot" nào!</p>
+            <a href="@Url.Action("ProductList", "Products")" class="btn btn-dark">Xem tất cả</a>
+        </div>
+
+        @*Đây là nơi trình diễn list sản phẩm*@
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card product-card h-100">
+                        <img src="@item.ANHSP" style="width: 100%; height: auto; border-radius: 30px; object-fit: cover;" class="card-img-top" alt="@item.TENSP">
+                        <div class="card-body text-center d-flex flex-column">
+                            <a href="@Url.Action("Details", "Products")/@item.MASP" class="text-decoration-none text-dark"><h5 class="card-title">@item.TENSP</h5></a>
+                            <p class="card-text fw-bold">@string.Format("{0:N0}", item.GIA) VNĐ</p>
+                            <button class="btn btn-dark mt-auto" onclick="addToCart('@item.MASP.Trim()', '@item.TENSP.Trim()', @item.GIA, '@item.ANHSP.Trim()')">Thêm vào giỏ</button>
+                        </div>
+                    </div>
+                </div>
+                n++;
+                if (n == 6)
+                {
+                    break;
+                }
+            }
+        </div>
+    </section>
+
+
+    @*Đây là nơi đặt thumb động*@
+
+    <section class="container my-5" style="margin-top: -40px;">
+        <div class="row">
+            <div class="col-12">
+                <div class="card product-card">
+                    <img src="@Url.Content("~/img_product/thumb/hero__mdl3lpkglcia_large_2x.jpg")" class="card-img-top" alt="OnePlus 3" style="border-radius: 30px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container my-5" style="margin-top: -40px;">
+        <h2 class="fw-bold mb-4">Đánh Giá Từ Khách Hàng</h2>
+        <p class="text-muted mb-4">Khách hàng của chúng tôi nghĩ gì?</p>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card bg-light border-0 p-3">
+                    <div class="card-body">
+                        <p class="card-text">"Giá cả phải chăng, đây là chiếc điện thoại mới tôi rất yêu thích."</p>
+                        <h6 class="card-title mb-0">Minh Tấn</h6>
+                        <div class="text-warning">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light border-0 p-3">
+                    <div class="card-body">
+                        <p class="card-text">"Giao hàng nhanh và dịch vụ chăm sóc khách hàng tốt."</p>
+                        <h6 class="card-title mb-0">Quang Long</h6>
+                        <div class="text-warning">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-light border-0 p-3">
+                    <div class="card-body">
+                        <p class="card-text">"Cửa hàng bán các sản phẩm chính hãng, rất tốt."</p>
+                        <h6 class="card-title mb-0">Ngọc Anh</h6>
+                        <div class="text-warning">
+                            <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container my-5 py-5">
+        <div class="row align-items-center">
+            <div class="col-md-5">
+                <h2 class="fw-bold" style="margin-bottom: 20px; margin-top: -50px;">Tại sao nên chọn chúng tôi?</h2>
+                <p class="text-muted">Chúng tôi có rất nhiều sản phẩm và các dịch vụ tốt nhất để phục vụ bạn.</p>
+                <a href="@Url.Action("About", "Home")" class="btn btn-dark" style="margin-bottom: 20px; margin-left: -5px;">Liên hệ ngay</a>
+            </div>
+            <div class="col-md-7">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex align-items-start p-3">
+                        <div class="p-3 me-3">
+                            <i class="bi bi-tags-fill fs-4 text-dark"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold">Giá cả phù hợp</h6>
+                            <p class="text-muted mb-0">Chúng tôi luôn cập nhật giá sản phẩm cho phù hợp với túi tiền của mọi người.</p>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-start p-3">
+                        <div class="p-3 me-3">
+                            <i class="bi bi-box-seam-fill fs-4 text-dark"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold">Vô vàn lựa chọn</h6>
+                            <p class="text-muted mb-0">Bạn có thể tìm thấy các sản phẩm, giúp người dùng nhanh chóng tìm được mặt hàng phù hợp.</p>
+                        </div>
+                    </div>
+                    <div class="list-group-item d-flex align-items-start p-3">
+                        <div class="p-3 me-3">
+                            <i class="bi bi-truck fs-4 text-dark"></i>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold">Giao hàng nhanh</h6>
+                            <p class="text-muted mb-0">Nhận sản phẩm Smartphones của bạn trong thời gian ngắn, an toàn và đúng hẹn.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @*Đây là nơi đặt thumb động*@
+
+    <section class="newsletter-box">
+        <p>Đăng ký ngay để nhận tin tức mới từ cửa hàng !!!</p>
+    </section>
+</main>

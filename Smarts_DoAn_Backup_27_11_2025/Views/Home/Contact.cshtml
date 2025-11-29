@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Contact";
+}
+
+<main>
+
+    @*<section class="container-fluid p-0">
+        <img src="@Url.Content("~/img_product/gif/gif_test2.gif")" class="img-fluid w-100" alt="Contact Banner" style="height: 300px; object-fit: cover;">
+    </section>*@
+
+    <section class="container my-5">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold">Liên Hệ SmartS</h1>
+            <p class="fs-5 text-muted">Đội ngũ CSKH hoạt động 24/7, sẵn sàng giải đáp</p>
+        </div>
+    </section>
+
+    <section class="container text-center my-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="bg-light p-3 rounded-circle d-inline-block mb-3">
+                    <i class="bi bi-truck fs-1 text-dark"></i>
+                </div>
+                <h5 class="fw-bold">Giao Hàng Tốc Độ</h5>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-light p-3 rounded-circle d-inline-block mb-3">
+                    <i class="bi bi-clock-history fs-1 text-dark"></i>
+                </div>
+                <h5 class="fw-bold">Xử Lý Nhanh Chóng</h5>
+            </div>
+            <div class="col-md-4">
+                <div class="bg-light p-3 rounded-circle d-inline-block mb-3">
+                    <i class="bi bi-gear-wide-connected fs-1 text-dark"></i>
+                </div>
+                <h5 class="fw-bold">Bảo Hành Trọn Đời</h5>
+            </div>
+        </div>
+    </section>
+
+    <section class="container my-5 py-5">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h3 class="fw-bold">Để lại thông tin, để chúng tôi tìm bạn !!!</h3>
+                <span class="text-muted">@ViewBag.Msg</span>
+                <br />
+                <br />
+                @using (Html.BeginForm("Contact", "Home", FormMethod.Post))
+                {
+                    <form class="mt-4">
+                        <div class="mb-3">
+                            <input type="email" name="EMAIL" class="form-control form-control-lg" placeholder="Email">
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="HOTEN" class="form-control form-control-lg" placeholder="Họ tên">
+                        </div>
+                        <div class="mb-3">
+                            <input type="tel" name="SODIENTHOAI" class="form-control form-control-lg" placeholder="Số điện thoại">
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" name="DIACHI" class="form-control form-control-lg" placeholder="Địa chỉ">
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-lg">Xác nhận</button>
+                    </form>
+
+                }
+            </div>
+            <div class="col-md-6" style="padding-top: 30px;">
+                <img src="@Url.Content("~/img_product/thumb/contact_thumb.jpg")" class="img-fluid rounded shadow-sm" alt="Smartphone Delta">
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-box mt-5">
+        <p>Đăng ký ngay để nhận tin tức mới từ cửa hàng !!!</p>
+    </section>
+
+</main>

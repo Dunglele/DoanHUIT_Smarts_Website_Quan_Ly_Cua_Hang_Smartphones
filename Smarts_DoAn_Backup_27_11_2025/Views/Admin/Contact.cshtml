@@ -1,0 +1,169 @@
+﻿@model IEnumerable<Smarts_DoAn_Backup_27_11_2025.Models.LIENHE>
+@{
+    ViewBag.Title = "Contact";
+    Layout = "~/Views/Shared/_AdminPanel.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+<style>
+    .avatar-circle {
+        width: 40px;
+        height: 40px;
+        background-color: #f0f2f5;
+        color: #5f6368;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .table-card {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        border: none;
+        border-radius: 10px;
+    }
+
+    .btn-action:hover {
+        background-color: rgba(0,0,0,0.05);
+        border-radius: 50%;
+    }
+</style>
+
+<div class="container-fluid py-4">
+
+    <header class="admin-header mb-4">
+        <h4 class="mb-0 fw-bold text-dark border-start border-4 border-primary ps-3">Danh sách liên hệ</h4>
+    </header>
+
+    <div class="card table-card">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-secondary">
+                        <tr>
+                            <th class="ps-4 text-uppercase small fw-bold">Mã LH</th>
+                            <th class="text-uppercase small fw-bold">Khách hàng</th>
+                            <th class="text-uppercase small fw-bold">Email</th>
+                            <th class="text-uppercase small fw-bold">Số điện thoại</th>
+                            <th class="text-end pe-4 text-uppercase small fw-bold">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold text-primary">#@item.MALH</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-circle me-3">
+                                                @(string.IsNullOrEmpty(item.HOTEN) ? "?" : item.HOTEN.Substring(0, 1).ToUpper())
+                                            </div>
+                                            <div class="fw-bold text-dark">@item.HOTEN</div>
+                                        </div>
+                                    </td>
+                                    <td class="text-muted">@item.EMAIL</td>
+                                    <td><span class="badge bg-light text-dark border">@item.SODIENTHOAI</span></td>
+                                    <td class="text-end pe-4">
+                                        <button class="btn btn-icon btn-action text-info"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#detailModal"
+                                                data-phone="@item.SODIENTHOAI"
+                                                data-name="@item.HOTEN"
+                                                data-email="@item.EMAIL"
+                                                data-address="@item.DIACHI">
+                                            <i class="bi bi-eye-fill" style="font-size: 1.2rem;"></i>
+                                        </button>
+                                        @using (Html.BeginForm("DeleteContact", "Admin", FormMethod.Post, new { style = "display:inline;" }))
+                                        {
+                                            @Html.Hidden("id", item.MALH)
+
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-light text-danger btn-action"
+                                                    onclick="return confirm('Bạn có chắc muốn xóa liên hệ #@item.MALH không?');">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                    Chưa có dữ liệu liên hệ nào.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold">Chi tiết Liên hệ</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4 mt-2">
+                    <div class="avatar-circle mx-auto mb-3" style="width: 80px; height: 80px; font-size: 32px; background-color: #e9ecef;">
+                        <i class="bi bi-person-fill text-secondary"></i>
+                    </div>
+                    <h5 id="modalName" class="fw-bold mb-1">Tên khách hàng</h5>
+                    <p id="modalEmail" class="text-muted small mb-0">email@example.com</p>
+                    <span id="modalId" class="badge bg-primary mt-2">ID: ...</span>
+                </div>
+
+                <div class="p-3 bg-light rounded-3">
+                    <div class="d-flex align-items-start">
+                        <i class="bi bi-geo-alt-fill text-danger me-3 mt-1 fs-5"></i>
+                        <div>
+                            <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 0.75rem;">Địa chỉ liên hệ</small>
+                            <span id="modalAddress" class="fw-medium text-dark">...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center pb-4">
+                <button type="button" class="btn btn-secondary w-100 rounded-pill" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var detailModal = document.getElementById('detailModal');
+        detailModal.addEventListener('show.bs.modal', function (event) {
+            // Button kích hoạt modal
+            var button = event.relatedTarget;
+
+            // Lấy dữ liệu từ data-attributes
+            var phone = button.getAttribute('data-phone');
+            var name = button.getAttribute('data-name');
+            var email = button.getAttribute('data-email');
+            var address = button.getAttribute('data-address');
+
+            // Cập nhật nội dung Modal
+            var modalPhone = detailModal.querySelector('#modalPhone');
+            var modalName = detailModal.querySelector('#modalName');
+            var modalEmail = detailModal.querySelector('#modalEmail');
+            var modalAddress = detailModal.querySelector('#modalAddress');
+
+            modalId.textContent = phone;
+            modalName.textContent = name ? name : 'Không có tên';
+            modalEmail.textContent = email ? email : 'Không có email';
+            modalAddress.textContent = address ? address : 'Chưa cập nhật địa chỉ';
+        });
+    });
+</script>

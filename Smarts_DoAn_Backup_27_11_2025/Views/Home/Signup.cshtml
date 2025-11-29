@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Đăng Ký SmartS";
+}
+
+<main class="container">
+    @*
+        Sử dụng Html.BeginForm để tạo thẻ form và truyền các class CSS vào.
+        Loại bỏ thẻ <form> HTML thủ công để tránh lỗi form lồng nhau.
+    *@
+    @using (Html.BeginForm("Signup", "Home", FormMethod.Post, new { @class = "auth-form text-center form-sign", style = "margin-top: -10px;" }))
+    {
+        @* Hiển thị thông báo chung (thành công hoặc thất bại) *@
+        <h1 class="display-5 fw-bold">Đăng Ký SmartS</h1>
+        <p class="fs-5 text-muted mb-4">Vui lòng điền các thông tin sau để đăng ký</p>
+
+        @* Trường Email *@
+        <div class="inputForm-sign">
+            <input type="email" class="input-sign" name="EMAIL" placeholder="Nhập Email của bạn" required>
+        </div>
+
+        @* Trường Họ tên *@
+        <div class="inputForm-sign">
+            <input type="text" class="input-sign" name="HOTEN" placeholder="Nhập họ tên" required>
+        </div>
+
+        @* Trường Số điện thoại *@
+        <div class="inputForm-sign">
+            <input type="tel" class="input-sign" name="SODIENTHOAI" placeholder="Số điện thoại" required>
+        </div>
+
+        @* Trường Mật khẩu (Sử dụng type="password" để ẩn ký tự) *@
+        <div class="inputForm-sign">
+            <input type="password" class="input-sign" name="MATKHAU" placeholder="Mật khẩu" required>
+        </div>
+
+        @* Trường Xác nhận Mật khẩu (Sử dụng type="password" để ẩn ký tự) *@
+        <div class="inputForm-sign">
+            <input type="password" class="input-sign" name="XACNHANMATKHAU" placeholder="Nhập lại mật khẩu" required>
+        </div>
+
+        <button class="button-submit-sign" type="submit">Đăng ký</button>
+
+        @* Hiển thị thông báo (ViewBag.Msg) *@
+        <p class="p line">
+            @ViewBag.Msg
+        </p>
+
+        <p class="p-sign">
+            Đã có tài khoản?
+            <a href="@Url.Action("SignIn", "Home")" style="text-decoration: none;"><span class="span-sign">Đăng nhập</span></a>
+        </p>
+        <hr />
+        <p class="text-muted">Tài khoản demo (Admin): admin@smarts.com | Mật khẩu: 123 <br />Tài khoản demo (Client): client@smarts.com | Mật khẩu: 123</p>
+    }
+
+    <section class="newsletter-box mt-5">
+        <p>Đăng ký ngay để nhận tin tức mới từ cửa hàng !!!</p>
+    </section>
+</main>

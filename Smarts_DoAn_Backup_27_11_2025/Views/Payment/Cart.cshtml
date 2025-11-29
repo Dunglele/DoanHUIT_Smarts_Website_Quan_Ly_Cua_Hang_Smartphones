@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "Cart";
+}
+
+<main class="container my-5">
+
+    <div class="text-center my-5">
+        <h1 class="display-5 fw-bold">Giỏ Hàng Của Bạn</h1>
+    </div>
+
+    <div id="cart-empty-msg" class="text-center" style="display: none;">
+        <p class="fs-4 text-muted">Giỏ hàng của bạn đang trống.</p>
+        <a href="@Url.Action("ProductList","Products")" class="btn btn-dark btn-lg">Tiếp tục mua sắm</a>
+    </div>
+
+    <div class="row" id="cart-total-container" style="display: none;">
+        <div class="col-lg-8">
+            <div class="table-responsive">
+                <table class="table align-middle cart-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Sản phẩm</th>
+                            <th scope="col">Giá</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Tạm tính</th>
+                            <th scope="col">Xóa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cart-items-container">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card bg-light border-0">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-4">Tổng Cộng</h5>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-light px-0">
+                            Tạm tính
+                            <span id="subtotal">$0.00</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-light px-0">
+                            Thuế (10%)
+                            <span id="tax">$0.00</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center bg-light px-0 fw-bold fs-5">
+                            Tổng cộng
+                            <span id="total">$0.00</span>
+                        </li>
+                    </ul>
+                    <a href="@Url.Action("Checkout", "Payment")" class="btn btn-dark btn-lg w-100 mt-4">Tiến hành thanh toán</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>

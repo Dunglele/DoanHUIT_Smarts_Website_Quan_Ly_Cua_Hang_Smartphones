@@ -1,0 +1,234 @@
+﻿@model IEnumerable<Smarts_DoAn_Backup_27_11_2025.Models.SANPHAM>
+@{
+    ViewBag.Title = "Quản lý Sản phẩm";
+    Layout = "~/Views/Shared/_AdminPanel.cshtml";
+}
+
+<div class="main-content">
+    <header class="admin-header">
+        <h4 class="mb-0 fw-bold text-dark">Sản phẩm</h4>
+        <button class="btn btn-primary" onclick="openAddModal()">
+            <i class="bi bi-plus-lg me-1"></i> Thêm sản phẩm mới
+        </button>
+    </header>
+
+    @* Hiển thị thông báo lỗi/thành công từ Controller *@
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success mt-2">@TempData["Message"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger mt-2">@TempData["Error"]</div>
+    }
+
+    <div class="card mt-3">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-3">Sản phẩm</th>
+                        <th>Thương hiệu</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th class="text-end pe-3">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-3">
+                                <div class="d-flex align-items-center">
+                                    <img src="@item.ANHSP" class="product-img" style="width:50px; height:50px; object-fit:cover; border-radius:4px; margin-right:10px;">
+                                    <div>
+                                        <h6 class="mb-0">@item.TENSP</h6>
+                                        <small class="text-muted">@item.MASP</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@item.THUONGHIEU</td>
+                            <td class="fw-bold">@string.Format("{0:N0} đ", item.GIA)</td>
+                            <td>@item.SOLUONG</td>
+                            <td class="text-end pe-3">
+                                @* Nút Sửa: Lưu dữ liệu vào data- attributes *@
+                                <button class="btn btn-sm btn-light text-primary me-2 btn-edit"
+                                        onclick="openEditModal(this)"
+                                        data-id="@item.MASP"
+                                        data-img="@item.ANHSP"
+                                        data-cat="@item.MADM"
+                                        data-name="@item.TENSP"
+                                        data-price="@item.GIA"
+                                        data-brand="@item.THUONGHIEU"
+                                        data-desc="@item.MOTA"
+                                        data-spec="@item.THONGSO"
+                                        data-qty="@item.SOLUONG">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+
+                                <a href="@Url.Action("DeleteProduct", new { id = item.MASP })"
+                                   class="btn btn-sm btn-light text-danger"
+                                   onclick="return confirm('Cảnh báo: Xóa sản phẩm có thể ảnh hưởng đến đơn hàng cũ. Bạn có chắc muốn xóa?');">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="catModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="modalTitle">Thông tin sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            @using (Html.BeginForm("SaveProduct", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", id = "formProduct" }))
+            {
+                <div class="modal-body">
+                    <input type="hidden" name="Mode" id="formMode" value="add" />
+                    <input type="hidden" name="ANHSP" id="txtANHSP_Hidden" />
+
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="mb-3">
+                                <img src="" id="prod-img-preview" class="img-thumbnail" style="max-height: 200px; display:none;">
+                            </div>
+                            <label class="btn btn-outline-primary btn-sm w-100">
+                                <i class="bi bi-upload"></i> Chọn ảnh
+                                <input type="file" name="fileUpload" id="prod-img-input" accept="image/*" hidden onchange="previewImage(this)">
+                            </label>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label fw-bold">Mã SP</label>
+                                    <input type="text" class="form-control" name="MASP" id="txtMASP" required>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label fw-bold">Danh mục</label>
+                                    <input type="text" class="form-control" name="MADM" id="txtMADM" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Tên sản phẩm</label>
+                                <input type="text" class="form-control" name="TENSP" id="txtTENSP" required>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <label class="form-label fw-bold">Giá</label>
+                                    <input type="number" class="form-control" name="GIA" id="txtGIA" required>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <label class="form-label fw-bold">Thương hiệu</label>
+                                    <input type="text" class="form-control" name="THUONGHIEU" id="txtTHUONGHIEU" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Số lượng</label>
+                                <input type="number" class="form-control" name="SOLUONG" id="txtSOLUONG" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Mô tả</label>
+                        <textarea name="MOTA" id="txtMOTA" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Thông số kỹ thuật</label>
+                        <textarea name="THONGSO" id="txtTHONGSO" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu dữ liệu</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    var myModal;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var modalEle = document.getElementById('catModal');
+        myModal = new bootstrap.Modal(modalEle);
+    });
+
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('prod-img-preview').src = e.target.result;
+                document.getElementById('prod-img-preview').style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function openAddModal() {
+        document.getElementById('formProduct').reset();
+        document.getElementById('formMode').value = 'add';
+        document.getElementById('modalTitle').innerText = 'Thêm sản phẩm mới';
+
+        // Mở khóa mã SP
+        document.getElementById('txtMASP').readOnly = false;
+
+        // Reset ảnh
+        document.getElementById('prod-img-preview').src = "";
+        document.getElementById('prod-img-preview').style.display = 'none';
+        document.getElementById('txtANHSP_Hidden').value = "";
+
+        myModal.show();
+    }
+
+    function openEditModal(btn) {
+        document.getElementById('formProduct').reset();
+        document.getElementById('formMode').value = 'edit';
+        document.getElementById('modalTitle').innerText = 'Cập nhật sản phẩm';
+
+        // Lấy dữ liệu từ data attributes
+        var id = btn.getAttribute('data-id');
+        var img = btn.getAttribute('data-img');
+        var cat = btn.getAttribute('data-cat');
+        var name = btn.getAttribute('data-name');
+        var price = btn.getAttribute('data-price');
+        var brand = btn.getAttribute('data-brand');
+        var desc = btn.getAttribute('data-desc');
+        var spec = btn.getAttribute('data-spec');
+        var qty = btn.getAttribute('data-qty');
+
+        // Điền dữ liệu
+        document.getElementById('txtMASP').value = id;
+        document.getElementById('txtMASP').readOnly = true; // Khóa mã SP khi sửa
+        document.getElementById('txtMADM').value = cat;
+        document.getElementById('txtTENSP').value = name;
+        document.getElementById('txtGIA').value = price;
+        document.getElementById('txtTHUONGHIEU').value = brand;
+        document.getElementById('txtMOTA').value = desc;
+        document.getElementById('txtTHONGSO').value = spec;
+        document.getElementById('txtSOLUONG').value = qty;
+
+        // Xử lý ảnh
+        if (img && img.trim() !== "") {
+            document.getElementById('prod-img-preview').src = img;
+            document.getElementById('prod-img-preview').style.display = 'block';
+            document.getElementById('txtANHSP_Hidden').value = img;
+        } else {
+            document.getElementById('prod-img-preview').style.display = 'none';
+        }
+
+        myModal.show();
+    }
+</script>

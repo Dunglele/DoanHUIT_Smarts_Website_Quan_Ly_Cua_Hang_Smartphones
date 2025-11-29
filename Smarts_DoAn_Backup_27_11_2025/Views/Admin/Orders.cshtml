@@ -1,0 +1,136 @@
+﻿@model Smarts_DoAn_Backup_27_11_2025.Models.CheckoutList
+@{
+    ViewBag.Title = "Quản lý Đơn hàng";
+    Layout = "~/Views/Shared/_AdminPanel.cshtml";
+}
+
+<div class="main-content">
+    <header class="admin-header">
+        <h4 class="mb-0 fw-bold text-dark">Danh sách Đơn hàng</h4>
+    </header>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success mt-2">@TempData["Message"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger mt-2">@TempData["Error"]</div>
+    }
+
+    <div class="card mt-3">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr>
+                        <th class="ps-3">Mã ĐH</th>
+                        <th>Khách hàng</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái (Hóa đơn)</th>
+                        <th class="text-end pe-3">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.DatHangs != null)
+                    {
+                        // Duyệt qua bảng DATHANG để lấy thông tin khách
+                        foreach (var dh in Model.DatHangs)
+                        {
+                            // 1. Tìm Hóa đơn tương ứng với Đơn hàng này
+                            var hd = Model.HoaDons.FirstOrDefault(h => h.MADH == dh.MADH);
+
+                            // Lấy trạng thái từ bảng HOADON (nếu có hóa đơn)
+                            string trangThai = (hd != null && hd.TINHTRANG != null) ? hd.TINHTRANG : "Chưa xử lý";
+
+                            // 2. Tính tiền từ bảng CHITIETHOADON dựa trên MAHD
+                            decimal tongTien = 0;
+                            if (hd != null)
+                            {
+                                tongTien = Model.ChiTietHoaDons
+                                                .Where(ct => ct.MAHD == hd.MAHD)
+                                                .Sum(ct => ct.THANHTIEN ?? 0);
+                            }
+
+                            // 3. Màu sắc trạng thái
+                            string badgeClass = "bg-secondary";
+                            if (trangThai == "Chờ xử lý") { badgeClass = "bg-warning text-dark"; }
+                            else if (trangThai == "Đang giao") { badgeClass = "bg-info text-dark"; }
+                            else if (trangThai == "Đã giao") { badgeClass = "bg-success"; }
+                            else if (trangThai == "Đã hủy") { badgeClass = "bg-danger"; }
+
+                            <tr>
+                                <td class="ps-3 fw-bold">#@dh.MADH</td>
+                                <td>
+                                    <div class="fw-bold">@dh.HO @dh.TEN</div>
+                                    <div class="small text-muted">@dh.EMAIL</div>
+                                    <div class="small text-muted">@dh.SODIENTHOAI</div>
+                                </td>
+                                <td class="fw-bold text-primary">
+                                    @string.Format("{0:N0} đ", tongTien)
+                                </td>
+                                <td>
+                                    <span class="badge @badgeClass">@trangThai</span>
+                                </td>
+                                <td class="text-end pe-3">
+                                    <button class="btn btn-sm btn-light text-primary border"
+                                            onclick="openOrderModal('@dh.MADH', '@dh.EMAIL', '@trangThai')">
+                                        <i class="bi bi-pencil-square"></i> Cập nhật
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Cập nhật trạng thái đơn hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            @using (Html.BeginForm("UpdateOrder", "Admin", FormMethod.Post))
+            {
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Mã đơn hàng (DATHANG)</label>
+                        <input type="text" class="form-control" name="MADH" id="modalMADH" readonly style="background-color: #f8f9fa;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small fw-bold">Khách hàng</label>
+                        <input type="text" class="form-control" id="modalEMAIL" readonly style="background-color: #f8f9fa;">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Trạng thái (Cập nhật vào HOADON)</label>
+                        <select class="form-select" name="TINHTRANG" id="modalTRANGTHAI">
+                            <option value="Chờ xử lý">Chờ xử lý</option>
+                            <option value="Đang xác nhận">Đang xác nhận</option>
+                            <option value="Đang giao">Đang giao</option>
+                            <option value="Đã giao">Đã giao</option>
+                            <option value="Đã hủy">Đã hủy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    function openOrderModal(id, email, status) {
+        document.getElementById('modalMADH').value = id;
+        document.getElementById('modalEMAIL').value = email;
+        document.getElementById('modalTRANGTHAI').value = status;
+
+        var myModal = new bootstrap.Modal(document.getElementById('orderModal'));
+        myModal.show();
+    }
+</script>
