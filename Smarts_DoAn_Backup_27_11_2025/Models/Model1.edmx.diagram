@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="049ab0af5b4d4a7684c118058179dbac" Name="Diagram1">
+        <EntityTypeShape EntityType="SMARTS_TESTModel.CHITIETHOADON" Width="1.5" PointX="5.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SMARTS_TESTModel.DANHMUC" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SMARTS_TESTModel.DATHANG" Width="1.5" PointX="0.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SMARTS_TESTModel.GIOHANG" Width="1.5" PointX="8.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SMARTS_TESTModel.HOADON" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="SMARTS_TESTModel.LIENHE" Width="1.5" PointX="2.75" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SMARTS_TESTModel.NGUOIDUNG" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SMARTS_TESTModel.SANPHAM" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <AssociationConnector Association="SMARTS_TESTModel.FK__CHITIETHOA__MAHD__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="SMARTS_TESTModel.FK__CHITIETHOA__MASP__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="SMARTS_TESTModel.FK__SANPHAM__MADM__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="SMARTS_TESTModel.FK__HOADON__MADH__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="SMARTS_TESTModel.FK__GIOHANG__MAND__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="SMARTS_TESTModel.FK__GIOHANG__MASP__3E52440B" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
