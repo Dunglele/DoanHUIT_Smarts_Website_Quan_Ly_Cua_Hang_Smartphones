@@ -1,4 +1,4 @@
-# Smarts_Website_Quan_Ly_Cua_Hang_Smartphones
+# Smarts Website Quản Lý Cửa Hàng Smartphones
 <h1>Đồ án môn học, "Lập trình web", "Hệ quản trị cơ sở dữ liệu", "Công nghệ phần mềm"</h1>
 <br />
 Do một vài vấn đề, các file sau không thể di chuyển lên Git
