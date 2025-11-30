@@ -7,7 +7,7 @@ Do một vài vấn đề, các file sau không thể di chuyển lên Git
     <li><b>Img_Product</b> - Các tệp ảnh trong /products bị lỗi - Reason: File name too long
 </ul>
 <hr />
-<h2>Các công nghệ sử dụng<h2 />
+<h2>Các công nghệ sử dụng</h2>
     <p>IDE: Visual Studio 2022</p>
     <p>Language: C#, HTML, CSS, Javascript</p>
     <p>Thư viện: Bootstrap5</p>
