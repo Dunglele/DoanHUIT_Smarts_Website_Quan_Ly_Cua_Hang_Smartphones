@@ -12,6 +12,7 @@ Do một vài vấn đề, các file sau không thể di chuyển lên Git
     <p>Language: C#, HTML, CSS, Javascript</p>
     <p>Thư viện: Bootstrap5</p>
     <p>Framework: Entity</p>
+    <p>Database: SQL Server</p>
     <p>Công nghệ bổ sung: AJAX, ...</p>
 <h2>Hình ảnh minh họa</h2>
 <h3>Trang chủ</h3>
