@@ -15,6 +15,10 @@ Do một vài vấn đề, các file sau không thể di chuyển lên Git
     <p>Database: SQL Server</p>
     <p>Công nghệ bổ sung: AJAX, ...</p>
 <h2>Hình ảnh minh họa</h2>
+<h2>Sau khi cài đặt các thư mục cần thiết</h2>
+    <p>B1: Tiến hành xóa thư thư mục "Model" của Entity trước đó</p>
+    <p>B2: Cài đặt Database</p>
+    <p>Sử dụng Entity Framework để tiến hành tạo sinh Model và liên kết với Project</p>
 <h3>Trang chủ</h3>
 <img width="1205" height="1912" alt="image" src="https://github.com/user-attachments/assets/5946045f-2cbe-4e5a-96f6-762fd1e23711" />
 <hr />
