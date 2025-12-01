@@ -1,27 +1,33 @@
-﻿@model Smarts_DoAn_Backup_27_11_2025.Models.DashboardList
+@model Smarts_DoAn_Backup_27_11_2025.Models.DashboardList
 @using System.Globalization
 @{
     ViewBag.Title = "Dashboard";
     Layout = "~/Views/Shared/_AdminPanel.cshtml";
 
-    // --- SỬA LẠI TÊN CLASS THÀNH CHỮ IN HOA (HOADON, CHITIETHOADON,...) ---
-
     // Kiểm tra null và khởi tạo list rỗng nếu cần
-    // Lưu ý: Phải dùng đúng tên class HOADON, CHITIETHOADON như trong Database Model của bạn
+    // Lưu ý: Phải dùng đúng tên class HOADON, CHITIETHOADON như trong Database Model
     var hoaDons = Model.HoaDons ?? new List<Smarts_DoAn_Backup_27_11_2025.Models.HOADON>();
     var chiTietHoaDons = Model.ChiTietHoaDons ?? new List<Smarts_DoAn_Backup_27_11_2025.Models.CHITIETHOADON>();
 
-    // Dự đoán SANPHAM và NGUOIDUNG cũng viết hoa, nếu không lỗi thì bạn sửa lại thành SanPham/NguoiDung
-    var sanPhams = Model.SanPhams ?? new List<Smarts_DoAn_Backup_27_11_2025.Models.SANPHAM>();
+    //var sanPhams = Model.SanPhams ?? new List<Smarts_DoAn_Backup_27_11_2025.Models.SANPHAM>();
     var nguoiDungs = Model.NguoiDungs ?? new List<Smarts_DoAn_Backup_27_11_2025.Models.NGUOIDUNG>();
 
     // Tính toán
     int tongDonHang = hoaDons.Count();
 
-    // Kiểm tra xem trường thành tiền tên là THANHTIEN hay ThanhTien (thường DB generate ra sẽ là chữ hoa)
     decimal tongDoanhThu = chiTietHoaDons.Sum(item => item.THANHTIEN ?? 0);
 
-    int tongSanPham = sanPhams.Count();
+    int tongSanPham = 0;
+    foreach(var it in Model.SanPhams)
+    {
+        if(it.SOLUONG.HasValue)
+        {
+            // Thêm .Value ở đây để lấy giá trị int bên trong int?
+            tongSanPham += it.SOLUONG.Value;
+        }
+    }
+
+    //int tongSanPham = sanPhams.Count();
 
     // Kiểm tra tên trường VAITRO
     int tongNguoiDung = nguoiDungs.Count(u => u.VAITRO == "Client");
@@ -41,7 +47,7 @@
                 <h3 class="fw-bold text-primary">@tongDonHang.ToString("N0")</h3>
             </div>
         </div>
-
+        
         <div class="col-md-3">
             <div class="card p-3 shadow-sm border-0">
                 <h6 class="text-muted">Doanh thu</h6>
