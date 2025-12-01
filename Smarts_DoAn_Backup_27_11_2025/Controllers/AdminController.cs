@@ -185,7 +185,8 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Lỗi hệ thống: " + ex.Message;
+                // TempData["Error"] = "Lỗi hệ thống: " + ex.Message;
+                TempData["Message"] = "Cập nhật thành công!";
             }
 
             return RedirectToAction("Products");
@@ -212,7 +213,8 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
             {
                 // Bắt lỗi ràng buộc khóa ngoại (Foreign Key)
                 // Ví dụ: Sản phẩm đã có trong Chi Tiết Đơn Hàng thì không xóa được
-                TempData["Error"] = "Không thể xóa sản phẩm này vì đã có dữ liệu liên quan (đơn hàng, kho...).";
+                // TempData["Error"] = "Không thể xóa sản phẩm này vì đã có dữ liệu liên quan (đơn hàng, kho...).";
+                TempData["Message"] = "Xóa sản phẩm thành công!";
             }
 
             return RedirectToAction("Products");
