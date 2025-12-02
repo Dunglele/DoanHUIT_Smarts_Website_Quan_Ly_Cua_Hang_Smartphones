@@ -204,3 +204,25 @@ BEGIN
 
 END
 
+-- Trigger không cho số lượng sản phẩm < 0
+CREATE TRIGGER TRG_CHECK_SOLUONG ON SANPHAM
+FOR INSERT, UPDATE
+AS
+BEGIN
+	IF EXISTS (SELECT * FROM inserted WHERE SOLUONG < 0)
+	BEGIN
+		ROLLBACK TRAN
+		RAISERROR('So luong khong the am!',16,1)
+	END
+END
+
+-- Proc xóa sản phẩm
+CREATE PROCEDURE SP_XOA_SP
+	@MASP CHAR(5)
+AS
+PRINT N'Xoa san pham ' + @MASP + N' thanh cong'
+DELETE FROM SANPHAM WHERE MASP=@MASP
+
+
+DECLARE @masp CHAR(5)
+EXEC SP_XOA_SP @masp='P-004'
