@@ -182,11 +182,25 @@ WHERE MADM = 'ACSR'
 CREATE TRIGGER UPDATE_DANHMUC ON SANPHAM
 FOR INSERT, UPDATE, DELETE
 AS
-	DECLARE @MADM CHAR(5)
-	SET @MADM = (SELECT MADM FROM inserted)
-	IF ((SELECT MADM FROM inserted) is NULL)
-		SET @MADM = (SELECT MADM FROM deleted)
-	UPDATE DANHMUC
-	SET SOLUONG_SP = (SELECT SUM(SOLUONG) FROM SANPHAM WHERE MADM = @MADM)
-	WHERE MADM = @MADM
-	COMMIT TRAN
+BEGIN
+    SET NOCOUNT ON;
+
+    -- 1. Tạo một tập hợp các MADM bị ảnh hưởng từ cả inserted (dữ liệu mới) và deleted (dữ liệu cũ)
+    WITH Affected_DANHMUC AS (
+        -- Lấy MADM từ các sản phẩm được chèn/cập nhật (dữ liệu mới)
+        SELECT MADM FROM inserted
+        UNION
+        -- Lấy MADM từ các sản phẩm bị xóa/cập nhật (dữ liệu cũ)
+        SELECT MADM FROM deleted
+    )
+    -- 2. Cập nhật bảng DANHMUC cho các MADM bị ảnh hưởng
+    UPDATE D
+    SET D.SOLUONG_SP = ISNULL(
+        (SELECT SUM(S.SOLUONG) 
+         FROM SANPHAM S 
+         WHERE S.MADM = A.MADM), 0)
+    FROM DANHMUC D
+    INNER JOIN Affected_DANHMUC A ON D.MADM = A.MADM;
+
+END
+
