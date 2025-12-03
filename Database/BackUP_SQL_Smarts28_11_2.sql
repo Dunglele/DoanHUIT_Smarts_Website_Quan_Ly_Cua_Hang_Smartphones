@@ -213,6 +213,7 @@ END
 ----------------------------
 --------- Producer ---------
 ----------------------------
+use SMARTS_TEST
 -- Proc xóa sản phẩm
 CREATE PROCEDURE SP_XOA_SP
 	@MASP CHAR(5)
@@ -236,6 +237,18 @@ PRINT N'Thêm sản phẩm ' + @masp + N' thành công'
 DECLARE @masp CHAR(5), @madm CHAR(5), @tensp NVARCHAR(120), @gia DECIMAL, @thuonghieu VARCHAR(30), @mota NVARCHAR(1000), @thongso NVARCHAR(1000), @soluong INT, @anhsp VARCHAR(500)
 EXEC SP_THEM_SP @masp='P-004', @madm='PHONE', @tensp=N'test', @gia=1, @thuonghieu='TEST', @mota=N'test', @thongso=N'test', @soluong=1, @anhsp='https://picsum.photos/200/300'
 
+-- Proc Thêm danh mục mới
+CREATE PROC DM_THEM_DM
+	@madm CHAR(5), @tendm NVARCHAR(30), @soluong_sp INT
+AS
+INSERT INTO DANHMUC (MADM, TENDM, SOLUONG_SP)
+VALUES
+(@madm, @tendm, @soluong_sp)
+PRINT N'Thêm danh mục '+ @madm + N' thành công'
+
+DECLARE @madm CHAR(5), @tendm NVARCHAR(30), @soluong_sp INT
+EXEC DM_THEM_DM @madm='TEST', @tendm=N'test', @soluong_sp=1
+
 -- Proc Thêm người dùng mới
 CREATE PROC ND_THEM_ND
 	@mand CHAR(5), @email VARCHAR(30), @vaitro VARCHAR(30), @matkhau CHAR(15), @hoten VARCHAR(60), @sodienthoai CHAR(11)
@@ -252,7 +265,7 @@ VALUES
 CREATE FUNCTION DS_SANPHAM()
 RETURNS TABLE
 AS
-RETURN ( SELECT MASP, TENSP, GIA, ANHSP FROM SANPHAM)
+RETURN ( SELECT * FROM SANPHAM)
 
 SELECT * FROM DBO.DS_SANPHAM()
 
