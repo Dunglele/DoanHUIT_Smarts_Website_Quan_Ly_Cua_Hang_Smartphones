@@ -213,7 +213,6 @@ END
 ----------------------------
 --------- Producer ---------
 ----------------------------
-use SMARTS_TEST
 -- Proc xóa sản phẩm
 CREATE PROCEDURE SP_XOA_SP
 	@MASP CHAR(5)
@@ -237,4 +236,12 @@ PRINT N'Thêm sản phẩm ' + @masp + N' thành công'
 DECLARE @masp CHAR(5), @madm CHAR(5), @tensp NVARCHAR(120), @gia DECIMAL, @thuonghieu VARCHAR(30), @mota NVARCHAR(1000), @thongso NVARCHAR(1000), @soluong INT, @anhsp VARCHAR(500)
 EXEC SP_THEM_SP @masp='P-004', @madm='PHONE', @tensp=N'test', @gia=1, @thuonghieu='TEST', @mota=N'test', @thongso=N'test', @soluong=1, @anhsp='https://picsum.photos/200/300'
 
-SELECT * FROM SANPHAM
+-- Proc Thêm người dùng mới
+CREATE PROC ND_THEM_ND
+	@mand CHAR(5), @email VARCHAR(30), @vaitro VARCHAR(30), @matkhau CHAR(15), @hoten VARCHAR(60), @sodienthoai CHAR(11)
+AS
+INSERT INTO NGUOIDUNG (MAND, EMAIL, VAITRO, MATKHAU, HOTEN, SODIENTHOAI)
+VALUES
+(@mand, @email, @vaitro, @matkhau, @hoten, @sodienthoai)
+
+
