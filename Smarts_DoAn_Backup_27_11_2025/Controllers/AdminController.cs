@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -9,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Smarts_DoAn_Backup_27_11_2025.Models;
+using System.Threading.Tasks;
 
 namespace Smarts_DoAn_Backup_27_11_2025.Controllers
 {
@@ -86,7 +88,7 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
         }
         [HttpPost]
         [ValidateInput(false)] // Cho phép nhập HTML trong Mô tả/Thông số (nếu cần)
-        public ActionResult SaveProduct(HttpPostedFileBase fileUpload, Smarts_DoAn_Backup_27_11_2025.Models.SANPHAM model, string Mode)
+        public async Task<ActionResult> SaveProduct(HttpPostedFileBase fileUpload, Smarts_DoAn_Backup_27_11_2025.Models.SANPHAM model, string Mode)
         {
             // Nếu ModelState không hợp lệ (ví dụ thiếu trường bắt buộc), quay lại trang và báo lỗi
 
@@ -121,6 +123,7 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
 
                     // Cập nhật đường dẫn mới
                     currentImagePath = "/img_product/product/" + uniqueName;
+                    model.ANHSP = currentImagePath;
                 }
                 catch (Exception)
                 {
@@ -134,18 +137,33 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
             {
                 if (Mode == "add")
                 {
+                    // --- BƯỚC SỬ DỤNG STORED PROCEDURE THAY THẾ CHO db.SANPHAM.Add() ---
+
                     var check = db.SANPHAM.Find(model.MASP);
                     if (check == null)
                     {
-                        // Nếu người dùng không upload ảnh, có thể gán ảnh mặc định
-                        //if (string.IsNullOrEmpty(currentImagePath))
-                        //{
-                        //    currentImagePath = "/img_product/product/default.png";
-                        //}
+                        // 1. Định nghĩa các tham số SQL từ dữ liệu model
+                        var parameters = new[]
+                        {
+                            new SqlParameter("@masp", model.MASP),
+                            new SqlParameter("@madm", model.MADM),
+                            new SqlParameter("@tensp", model.TENSP),
+                            new SqlParameter("@gia", model.GIA),
+                            new SqlParameter("@thuonghieu", model.THUONGHIEU),
+                            new SqlParameter("@mota", model.MOTA ?? (object)DBNull.Value), // Xử lý giá trị NULL
+                            new SqlParameter("@thongso", model.THONGSO ?? (object)DBNull.Value),
+                            new SqlParameter("@soluong", model.SOLUONG),
+                            new SqlParameter("@anhsp", model.ANHSP ?? (object)DBNull.Value)};
 
-                        model.ANHSP = currentImagePath;
-                        db.SANPHAM.Add(model);
-                        db.SaveChanges();
+                        // 2. Gọi Stored Procedure bằng ExecuteSqlRawAsync
+                        await db.Database.ExecuteSqlCommandAsync(
+                            "EXEC SP_THEM_SP @masp, @madm, @tensp, @gia, @thuonghieu, @mota, @thongso, @soluong, @anhsp",
+                            parameters
+                        );
+
+                        // Lưu ý: Khi gọi Stored Procedure, không cần gọi db.SaveChanges() nữa
+                        // vì lệnh EXEC đã thực thi thao tác trực tiếp trên DB.
+
                         TempData["Message"] = "Thêm sản phẩm thành công!";
                     }
                     else
@@ -185,8 +203,8 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
             }
             catch (Exception ex)
             {
-                // TempData["Error"] = "Lỗi hệ thống: " + ex.Message;
-                TempData["Message"] = "Cập nhật thành công!";
+                TempData["Error"] = "Lỗi hệ thống: " + ex.Message;
+                //TempData["Message"] = "Cập nhật thành công!";
             }
 
             return RedirectToAction("Products");
@@ -213,8 +231,8 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
             {
                 // Bắt lỗi ràng buộc khóa ngoại (Foreign Key)
                 // Ví dụ: Sản phẩm đã có trong Chi Tiết Đơn Hàng thì không xóa được
-                // TempData["Error"] = "Không thể xóa sản phẩm này vì đã có dữ liệu liên quan (đơn hàng, kho...).";
-                TempData["Message"] = "Xóa sản phẩm thành công!";
+                TempData["Error"] = "Không thể xóa sản phẩm này vì đã có dữ liệu liên quan (đơn hàng, kho...).";
+                //TempData["Message"] = "Xóa sản phẩm thành công!";
             }
 
             return RedirectToAction("Products");
@@ -224,7 +242,7 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
             return View(db.DANHMUC.ToList());
         }
         [HttpPost]
-        public ActionResult SaveCategory(Smarts_DoAn_Backup_27_11_2025.Models.DANHMUC model, string Mode)
+        public async Task<ActionResult> SaveCategory(Smarts_DoAn_Backup_27_11_2025.Models.DANHMUC model, string Mode)
         {
             if (ModelState.IsValid)
             {
@@ -232,11 +250,25 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
                 {
                     // --- XỬ LÝ THÊM MỚI ---
                     // Kiểm tra xem mã đã tồn tại chưa
-                    var check = db.DANHMUC.Find(model.MADM);
+                    var check = db.SANPHAM.Find(model.MADM);
                     if (check == null)
                     {
-                        db.DANHMUC.Add(model);
-                        db.SaveChanges();
+                        // 1. Định nghĩa các tham số SQL từ dữ liệu model
+                        var parameters = new[]
+                        {
+                            new SqlParameter("@madm", model.MADM),
+                            new SqlParameter("@tendm", model.TENDM),
+                            new SqlParameter("@soluong_sp", model.SOLUONG_SP) 
+                        };
+
+                        // 2. Gọi Stored Procedure bằng ExecuteSqlRawAsync
+                        // ExecuteSqlRaw dùng để thực thi các lệnh SQL KHÔNG trả về Entity (INSERT, UPDATE, DELETE)
+                        await db.Database.ExecuteSqlCommandAsync(
+                                            "EXEC DM_THEM_DM @madm, @tendm, @soluong_sp", parameters);
+
+                        // Lưu ý: Khi gọi Stored Procedure, bạn không cần gọi db.SaveChanges() nữa
+                        // vì lệnh EXEC đã thực thi thao tác trực tiếp trên DB.
+
                     }
                     else
                     {
@@ -287,7 +319,7 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
             return View(db.NGUOIDUNG.ToList());
         }
         [HttpPost]
-        public ActionResult SaveAccount(Smarts_DoAn_Backup_27_11_2025.Models.NGUOIDUNG model, string Mode)
+        public async Task<ActionResult> SaveAccount(Smarts_DoAn_Backup_27_11_2025.Models.NGUOIDUNG model, string Mode)
         {
             if (ModelState.IsValid)
             {
@@ -299,8 +331,21 @@ namespace Smarts_DoAn_Backup_27_11_2025.Controllers
                     var checkUSERNAME = db.NGUOIDUNG.Find(model.EMAIL);
                     if (checkMAND == null && checkUSERNAME == null)
                     {
-                        db.NGUOIDUNG.Add(model);
-                        db.SaveChanges();
+                        // 1. Định nghĩa các tham số SQL từ dữ liệu model
+                        var parameters = new[]
+                        {
+                            new SqlParameter("@mand", model.MAND),
+                            new SqlParameter("@email", model.EMAIL),
+                            new SqlParameter("@vaitro", model.VAITRO),
+                            new SqlParameter("@matkhau", model.MATKHAU),
+                            new SqlParameter("@hoten", model.HOTEN),
+                            new SqlParameter("@sodienthoai", model.SODIENTHOAI) 
+                        };
+
+                        // 2. Gọi Stored Procedure bằng ExecuteSqlRawAsync
+                        // ExecuteSqlRaw dùng để thực thi các lệnh SQL KHÔNG trả về Entity (INSERT, UPDATE, DELETE)
+                        await db.Database.ExecuteSqlCommandAsync(
+                                            "EXEC ND_THEM_ND @mand, @email, @vaitro, @matkhau, @hoten, @sodienthoai",parameters);
                     }
                     else
                     {
