@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Smarts_DoAn_Backup_27_11_2025.Models.NGUOIDUNG>
+@model IEnumerable<Smarts_DoAn_Backup_27_11_2025.Models.NGUOIDUNG>
 @{
     ViewBag.Title = "Accounts";
     Layout = "~/Views/Shared/_AdminPanel.cshtml";
@@ -25,7 +25,7 @@
                             <td><span class="badge badge-admin">@user.VAITRO</span></td>
                             <td class="text-end pe-3">
                                 <button class="btn btn-sm btn-light text-primary me-2"
-                                        onclick="openModal('edit','@user.MAND', '@user.EMAIL', '@user.MATKHAU', '@user.VAITRO')">
+                                        onclick="openModal('edit','@user.MAND', '@user.EMAIL', '@user.MATKHAU', '@user.VAITRO', '@user.HOTEN', '@user.SODIENTHOAI')">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
                                 @if (user.VAITRO.Trim() != "Admin")
@@ -64,19 +64,28 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Tài khoản</label>
+                        <label class="form-label">Email</label>
                         <input type="text" class="form-control" name="EMAIL" id="txtEMAIL" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Mật khẩu</label>
-                        <input type="text" class="form-control" name="MATKHAU" id="txtMATKHAU" required>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Vai trò</label>
                         <input type="text" class="form-control" name="VAITRO" id="txtVAITRO">
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu</label>
+                        <input type="text" class="form-control" name="MATKHAU" id="txtMATKHAU" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Họ tên</label>
+                        <input type="text" class="form-control" name="HOTEN" id="txtHOTEN" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" name="SODIENTHOAI" id="txtSODIENTHOAI" required>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -89,7 +98,7 @@
 
 <script>
     // Hàm mở Modal và điền dữ liệu
-    function openModal(action, id, name, password, role) {
+    function openModal(action, id, email, password, role, name, phone) {
         // Lấy element modal
         var modalEle = document.getElementById('catModal');
         var myModal = new bootstrap.Modal(modalEle);
@@ -103,10 +112,13 @@
             document.getElementById('txtMAND').value = id;
             document.getElementById('txtMAND').readOnly = true; // Khóa không cho sửa ID
 
-            document.getElementById('txtEMAIL').value = name;
+            document.getElementById('txtEMAIL').value = email;
             document.getElementById('txtMATKHAU').value = password;
             document.getElementById('txtVAITRO').value = role;
-        } else {
+            document.getElementById('txtHOTEN').value = name;
+            document.getElementById('txtSODIENTHOAI').value = phone;
+        }
+        else {
             // --- CHẾ ĐỘ THÊM MỚI ---
             document.getElementById('modalTitle').innerText = 'Thêm danh mục mới';
             document.getElementById('formMode').value = 'add';
@@ -118,6 +130,8 @@
             document.getElementById('txtEMAIL').value = '';
             document.getElementById('txtMATKHAU').value = '';
             document.getElementById('txtVAITRO').value = '';
+            document.getElementById('txtHOTEN').value = '';
+            document.getElementById('txtSODIENTHOAI').value = '';
         }
 
         // Hiển thị modal
