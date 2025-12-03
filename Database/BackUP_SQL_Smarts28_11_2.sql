@@ -107,28 +107,19 @@ INSERT INTO DANHMUC VALUES ('PHONE', N'Điện thoại di động', 0),
 -- ADD Sản phẩm
 INSERT INTO SANPHAM (MASP, MADM, TENSP, GIA, THUONGHIEU, MOTA, THONGSO, SOLUONG, ANHSP)
 VALUES
-('P-001', 'PHONE', N'Iphone XS Max', 8000000, N'Apple', N'Test', N'Test', 10, 'https://picsum.photos/200/300
-'),
-('P-002', 'PHONE', N'Iphone 13', 13000000, 'Apple', N'Test', N'Test', 5, 'https://picsum.photos/200/300
-'),
-('P-003', 'PHONE', N'Iphone 17 Pro Max', 38000000, 'Apple', N'Test', N'Test', 6, 'https://picsum.photos/200/300
-'),
+('P-001', 'PHONE', N'Iphone XS Max', 8000000, N'Apple', N'Test', N'Test', 10, '/img_product/product/20251128143021_h_nh__nh_68_423aa63eb0f243738f837f3aa1d66e9a_large_6f4c46a6e35443dcbc5a9f9562e2fbd8_master.jpeg'),
+('P-002', 'PHONE', N'Iphone 13', 13000000, 'Apple', N'Test', N'Test', 5, '/img_product/product/20251128143146_pro_max_blue_6881422e0a9c4ac58941e8188f671802_master.png'),
+('P-003', 'PHONE', N'Iphone 17 Pro Max', 38000000, 'Apple', N'Test', N'Test', 6, '/img_product/product/20251128143237_h_nh__nh_1_76ff3efeae0244f8bf4edd401bf98275_master.jpeg'),
 ('P-004', 'PHONE', N'Samsung ZFlip4', 8000000, 'Samsung', N'Test', N'Test', 7, 'https://picsum.photos/200/300
 '),
 
-('I-001', 'IPAD', N'Ipad M1', 8000000, 'Apple', N'Test', N'Test', 7, 'https://picsum.photos/200/300
-'),
-('I-002', 'IPAD', N'Ipad M2', 10000000, 'Apple', N'Test', N'Test', 5, 'https://picsum.photos/200/300
-'),
-('I-003', 'IPAD', N'Ipad Samsung', 6000000, 'Samsung', N'Test', N'Test', 2, 'https://picsum.photos/200/300
-'),
+('I-001', 'IPAD', N'Ipad M1', 8000000, 'Apple', N'Test', N'Test', 7, '/img_product/product/20251128142706_hinh_anh_128921753cb440a194c73aea732d17db_master.jpeg'),
+('I-002', 'IPAD', N'Ipad M2', 10000000, 'Apple', N'Test', N'Test', 5, '/img_product/product/20251128142813_ipad-pro-m2-12.9-cpo-1_d9dae41cd040451eab47701c16a5e09d_master.jpg'),
+('I-003', 'IPAD', N'Ipad Samsung', 6000000, 'Samsung', N'Test', N'Test', 2, '/img_product/product/20251128142858_rose_gold_0e243545eb664c87af7dd0e6deb8f676_master.png'),
 
-('A-001', 'ACSR', N'Tai nghe Alphawolf 2025', 700000, 'Alphawolf', N'Test', N'Test', 1, 'https://picsum.photos/200/300
-'),
-('A-002', 'ACSR', N'Sạc nhanh 30W đầu ra Type C', 50000, 'Base us', N'Test', N'Test', 2, 'https://picsum.photos/200/300
-'),
-('A-003', 'ACSR', N'Sạc dự phòng 5000mah', 200000, 'Base us', N'Test', N'Test', 3, 'https://picsum.photos/200/300
-');
+('A-001', 'ACSR', N'Tai nghe Alphawolf 2025', 700000, 'Alphawolf', N'Test', N'Test', 1, '/img_product/product/20251128141847_358076127_580506980911511_9071883232931024958_n.jpg'),
+('A-002', 'ACSR', N'Sạc nhanh 30W đầu ra Type C', 50000, 'Base us', N'Test', N'Test', 2, '/img_product/product/20251128142118_598763_ice Crystal PD 30W Lightning 2.jpg'),
+('A-003', 'ACSR', N'Sạc dự phòng 5000mah', 200000, 'Base us', N'Test', N'Test', 3, '/img_product/product/20251128142303_magipi-20w-d199-7_9016.jpg');
 
 -- ADD Đơn đặt hàng
 INSERT INTO DATHANG VALUES ('DH001', N'Nguyễn Văn', N' A', 'nguyenvana@smarts.com', '09ABCXYZMNF', '40 Nguyễn Đình Chính', N'Thanh toán khi nhận hàng'),
@@ -177,6 +168,9 @@ SET SOLUONG_SP = (SELECT SUM(SOLUONG) FROM SANPHAM, DANHMUC WHERE SANPHAM.MADM =
 WHERE MADM = 'ACSR'
 
 ----------------------------
+---------- Trigger ---------
+----------------------------
+
 --- Trigger cập nhật tổng số lượng sản phẩm trong DANHMUC mỗi khi thêm, xóa, sửa sản phẩm.
 
 CREATE TRIGGER UPDATE_DANHMUC ON SANPHAM
@@ -216,6 +210,10 @@ BEGIN
 	END
 END
 
+----------------------------
+--------- Producer ---------
+----------------------------
+use SMARTS_TEST
 -- Proc xóa sản phẩm
 CREATE PROCEDURE SP_XOA_SP
 	@MASP CHAR(5)
@@ -226,3 +224,17 @@ DELETE FROM SANPHAM WHERE MASP=@MASP
 
 DECLARE @masp CHAR(5)
 EXEC SP_XOA_SP @masp='P-004'
+
+-- Proc Thêm sản phẩm mới
+CREATE PROC SP_THEM_SP
+	@masp CHAR(5), @madm CHAR(5), @tensp NVARCHAR(120), @gia DECIMAL, @thuonghieu VARCHAR(30), @mota NVARCHAR(1000), @thongso NVARCHAR(1000), @soluong INT, @anhsp VARCHAR(500)
+AS
+INSERT INTO SANPHAM (MASP, MADM, TENSP, GIA, THUONGHIEU, MOTA, THONGSO, SOLUONG, ANHSP)
+VALUES
+(@masp, @madm, @tensp, @gia, @thuonghieu, @mota, @thongso, @soluong, @anhsp)
+PRINT N'Thêm sản phẩm ' + @masp + N' thành công'
+
+DECLARE @masp CHAR(5), @madm CHAR(5), @tensp NVARCHAR(120), @gia DECIMAL, @thuonghieu VARCHAR(30), @mota NVARCHAR(1000), @thongso NVARCHAR(1000), @soluong INT, @anhsp VARCHAR(500)
+EXEC SP_THEM_SP @masp='P-004', @madm='PHONE', @tensp=N'test', @gia=1, @thuonghieu='TEST', @mota=N'test', @thongso=N'test', @soluong=1, @anhsp='https://picsum.photos/200/300'
+
+SELECT * FROM SANPHAM
