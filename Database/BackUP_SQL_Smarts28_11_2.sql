@@ -244,4 +244,22 @@ INSERT INTO NGUOIDUNG (MAND, EMAIL, VAITRO, MATKHAU, HOTEN, SODIENTHOAI)
 VALUES
 (@mand, @email, @vaitro, @matkhau, @hoten, @sodienthoai)
 
+----------------------------
+--------- Function ---------
+----------------------------
 
+-- Func Xem danh sách sản phẩm
+CREATE FUNCTION DS_SANPHAM()
+RETURNS TABLE
+AS
+RETURN ( SELECT MASP, TENSP, GIA, ANHSP FROM SANPHAM)
+
+SELECT * FROM DBO.DS_SANPHAM()
+
+-- Func Xem danh sách danh mục
+CREATE FUNCTION DS_DANHMUC()
+RETURNS TABLE
+AS
+RETURN (SELECT MADM, TENDM FROM DANHMUC)
+
+SELECT * FROM DBO.DS_DANHMUC()
