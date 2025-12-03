@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -16,12 +16,23 @@ namespace Smarts_DoAn_Backup.Controllers
         // GET: Products
         public ActionResult ProductList()
         {
-            // Corrected the variable to fetch the list of DANHMUC instead of SANPHAM
-            var listSp = db.SANPHAM.Include("DANHMUC");
-            var listDm = db.DANHMUC.ToList(); // Fetching DANHMUC entities instead of SANPHAM
+            // --- GỌI TABLE-VALUED FUNCTION: DS_SANPHAM() ---
 
+            // 1. Định nghĩa truy vấn gọi Function
+            string sqlQuery = "SELECT * FROM DBO.DS_SANPHAM()";
+
+            // 2. Thực thi Function và ánh xạ kết quả vào lớp SANPHAM
+            // SqlQuery<T> là phương thức của EF6 để thực thi SQL và trả về một tập hợp Entity/Model.
+            // *Lưu ý: Function này không cần tham số, nếu cần tham số, truyền chúng tương tự ExecuteSqlCommand.*
+            var listSp = db.SANPHAM.SqlQuery(sqlQuery).ToList();
+
+            // Lấy danh mục như cũ
+            var listDm = db.DANHMUC.ToList();
+
+            // 3. Trả về View với ViewModel chứa dữ liệu từ Function
             return View(new ProductListVM
             {
+                // Truyền List<SANPHAM> (kết quả từ Function) vào ViewModel
                 SanPhams = listSp,
                 DanhMucs = listDm
             });
@@ -52,7 +63,8 @@ namespace Smarts_DoAn_Backup.Controllers
 
         public ActionResult Filter()
         {
-            return PartialView(db.DANHMUC.ToList());
+            string sqlQuery = "SELECT * FROM DBO.DS_DANHMUC()";
+            return PartialView(db.DANHMUC.SqlQuery(sqlQuery).ToList());
         }
 
         protected override void Dispose(bool disposing)
